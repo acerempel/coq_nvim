@@ -107,7 +107,7 @@ def _when_idle(nvim: Nvim, stack: Stack) -> None:
     def cont() -> None:
         buf = cur_buf(nvim)
         buf_type: str = buf_get_option(nvim, buf=buf, key="buftype")
-        if buf_type == "terminal":
+        if buf_type in stack.settings.excluded_buftypes:
             nvim.api.buf_detach(buf)
             state(nono_bufs={buf.number})
 

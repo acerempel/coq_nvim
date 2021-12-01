@@ -25,7 +25,7 @@ def _buf_enter(nvim: Nvim, stack: Stack) -> None:
         buf = cur_buf(nvim)
         listed = buf_get_option(nvim, buf=buf, key="buflisted")
         buf_type: str = buf_get_option(nvim, buf=buf, key="buftype")
-        if listed and buf_type != "terminal":
+        if listed and buf_type not in stack.settings.excluded_buftypes:
             nvim.api.buf_attach(buf, True, {})
 
 
@@ -45,6 +45,8 @@ class _Qmsg:
     lines: Sequence[str]
     filetype: str
 
+
+excluded_filetypes = {"gitcommit", "markdown"}
 
 @rpc(blocking=True)
 def _listener(nvim: Nvim, stack: Stack) -> None:
@@ -90,6 +92,7 @@ def _listener(nvim: Nvim, stack: Stack) -> None:
                     and not qmsg.pending
                     and qmsg.mode.startswith("i")
                     and qmsg.comp_mode in {"", "eval", "function", "ctrl_x"}
+                    and qmsg.filetype not in excluded_filetypes
                 ):
                     comp_func(nvim, s=s, manual=False)
 

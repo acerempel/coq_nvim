@@ -1,6 +1,7 @@
 ---
 xdg: False
 auto_start: False
+excluded_buftypes: [terminal, quickfix]
 
 keymap:
   recommended: True

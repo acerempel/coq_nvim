@@ -189,6 +189,7 @@ class Clients:
 class Settings:
     auto_start: Union[bool, Literal["shut-up"]]
     xdg: bool
+    excluded_buftypes: AbstractSet[str]
     limits: Limits
     display: Display
     match: MatchOptions
